@@ -1,6 +1,7 @@
 package com.epicodus.myrestaurants.ui;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +22,7 @@ import com.epicodus.myrestaurants.R;
 import com.epicodus.myrestaurants.adapters.RestaurantListAdapter;
 import com.epicodus.myrestaurants.models.Restaurant;
 import com.epicodus.myrestaurants.services.YelpService;
+import com.epicodus.myrestaurants.util.OnRestaurantSelectedListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class RestaurantListFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String recentAddress;
+    private OnRestaurantSelectedListener mOnRestaurantSelectedListener;
 
 
     public RestaurantListFragment() {
@@ -99,6 +102,16 @@ public class RestaurantListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mOnRestaurantSelectedListener = (OnRestaurantSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + e.getMessage());
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
@@ -118,7 +131,7 @@ public class RestaurantListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        restaurantListAdapter = new RestaurantListAdapter(getActivity(), restaurants);
+                        restaurantListAdapter = new RestaurantListAdapter(getActivity(), restaurants, mOnRestaurantSelectedListener);
 
                         recyclerView.setAdapter(restaurantListAdapter);
                         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
