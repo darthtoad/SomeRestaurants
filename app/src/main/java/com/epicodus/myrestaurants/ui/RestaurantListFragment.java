@@ -57,7 +57,6 @@ public class RestaurantListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         editor = sharedPreferences.edit();
-
         setHasOptionsMenu(true);
     }
 
